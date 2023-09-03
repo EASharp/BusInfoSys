@@ -9,9 +9,9 @@ public class PlaceEntityConfiguration:IEntityTypeConfiguration<Place>
 {
     public void Configure(EntityTypeBuilder<Place> builder)
     {
-        builder.Property(p => p.Id).HasMaxLength(32);
+        builder.Property(p => p.Id).HasMaxLength(40);
         builder.HasKey(p => p.Id);
-        builder.HasIndex(p => p.RouteNum);
+       
         
     }
 }

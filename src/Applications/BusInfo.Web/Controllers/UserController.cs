@@ -18,7 +18,7 @@ public class UserController: Controller
         _userDriverRepository = userDriverRepository;
         _busRepository = busRepository;
     }
-    [Route("User/{userid}")]
+    [Route("Driver/View/{userid}")]
     public async Task<ViewResult> Profile(string userid)
     {
         Driver driver = await _userDriverRepository.GetByIdAsync(userid);
@@ -30,6 +30,7 @@ public class UserController: Controller
     }
 
     [HttpPost]
+
     public async Task<IActionResult> UpdateProfile(DriverViewModel driverViewModel)
     { 
         Driver driver = _mapper.Map<Driver>(driverViewModel);

@@ -2,6 +2,7 @@
 using BusInfo.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusInfo.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDb))]
-    partial class AppDbModelSnapshot : ModelSnapshot
+    [Migration("20230903084328_PlacesConfiguration")]
+    partial class PlacesConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,8 +24,8 @@ namespace BusInfo.Infrastructure.Migrations
             modelBuilder.Entity("BusInfo.Core.Classes.Bus", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("BusNum")
                         .IsRequired()
@@ -30,8 +33,8 @@ namespace BusInfo.Infrastructure.Migrations
 
                     b.Property<string>("DriverId")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("tinyint(1)");
@@ -59,8 +62,8 @@ namespace BusInfo.Infrastructure.Migrations
             modelBuilder.Entity("BusInfo.Core.Classes.Driver", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("DriverLogin")
                         .IsRequired()
@@ -86,8 +89,8 @@ namespace BusInfo.Infrastructure.Migrations
             modelBuilder.Entity("BusInfo.Core.Classes.Place", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("Latitude")
                         .IsRequired()
@@ -106,45 +109,32 @@ namespace BusInfo.Infrastructure.Migrations
                     b.ToTable("Places");
                 });
 
-            modelBuilder.Entity("BusInfo.Core.Classes.Route", b =>
+            modelBuilder.Entity("BusPlace", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<string>("BusId")
+                        .HasColumnType("varchar(32)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Route");
-                });
-
-            modelBuilder.Entity("PlaceRoute", b =>
-                {
                     b.Property<string>("PlacesId")
-                        .HasColumnType("varchar(40)");
+                        .HasColumnType("varchar(32)");
 
-                    b.Property<string>("RouteId")
-                        .HasColumnType("varchar(255)");
+                    b.HasKey("BusId", "PlacesId");
 
-                    b.HasKey("PlacesId", "RouteId");
+                    b.HasIndex("PlacesId");
 
-                    b.HasIndex("RouteId");
-
-                    b.ToTable("PlaceRoute");
+                    b.ToTable("BusPlace");
                 });
 
-            modelBuilder.Entity("PlaceRoute", b =>
+            modelBuilder.Entity("BusPlace", b =>
                 {
-                    b.HasOne("BusInfo.Core.Classes.Place", null)
+                    b.HasOne("BusInfo.Core.Classes.Bus", null)
                         .WithMany()
-                        .HasForeignKey("PlacesId")
+                        .HasForeignKey("BusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusInfo.Core.Classes.Route", null)
+                    b.HasOne("BusInfo.Core.Classes.Place", null)
                         .WithMany()
-                        .HasForeignKey("RouteId")
+                        .HasForeignKey("PlacesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

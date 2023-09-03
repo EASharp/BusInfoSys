@@ -15,5 +15,6 @@ public static class Loader
         services.AddScoped(typeof(IBusRepository),typeof(BusRepository));
         services.AddScoped(typeof(IPlaceRepository),typeof(PlaceRepository));
         services.AddScoped(typeof(IDriverRepository),typeof(DriverRepository));
+        services.AddScoped(typeof(IRouteRepository),typeof(RouteRepository));
     }
 }

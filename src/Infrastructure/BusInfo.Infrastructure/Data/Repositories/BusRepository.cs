@@ -15,4 +15,9 @@ public class BusRepository:RepositoryBase<Bus>,IRepositoryBase<Bus>,IBusReposito
     {
         return set.FirstAsync(bus =>bus.DriverId==driverId); 
     }
+
+    public Task<Bus> GetWithPlaces(string busId)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,6 +1,5 @@
 using BusInfo.Infrastructure;
 using BusInfo.Web.Mapping;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

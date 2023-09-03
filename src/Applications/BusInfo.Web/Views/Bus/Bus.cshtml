@@ -1,18 +1,285 @@
-@model BusInfo.Core.Classes.Bus
-
-@{
-    Layout = null;
-}
-
+@model BusViewModel;
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
+@{
+	Layout="_Layout";
+}
 <head>
-    <title>title</title>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+	<link href="~/css/app.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+	<style>
+	.modal-confirm {		
+    	color: #636363;
+    	width: 400px;
+    }
+    .modal-confirm .modal-content {
+    	padding: 20px;
+    	border-radius: 5px;
+    	border: none;
+    	text-align: center;
+    	font-size: 14px;
+    }
+    .modal-confirm .modal-header {
+    	border-bottom: none;   
+    	position: relative;
+    }
+    .modal-confirm h4 {
+    	text-align: center;
+    	font-size: 26px;
+    	margin: 30px 0 -10px;
+    }
+    .modal-confirm .close {
+    	position: absolute;
+    	top: -5px;
+    	right: -2px;
+    }
+    .modal-confirm .modal-body {
+    	color: #999;
+    }
+    .modal-confirm .modal-footer {
+    	border: none;
+    	text-align: center;		
+    	border-radius: 5px;
+    	font-size: 13px;
+    	padding: 10px 15px 25px;
+    }
+    .modal-confirm .modal-footer a {
+    	color: #999;
+    }		
+    .modal-confirm .icon-box {
+    	width: 80px;
+    	height: 80px;
+    	margin: 0 auto;
+    	border-radius: 50%;
+    	z-index: 9;
+    	text-align: center;
+    	border: 3px solid #f15e5e;
+    }
+    .modal-confirm .icon-box i {
+    	color: #f15e5e;
+    	font-size: 46px;
+    	display: inline-block;
+    	margin-top: 13px;
+    }
+    .modal-confirm .btn, .modal-confirm .btn:active {
+    	color: #fff;
+    	border-radius: 4px;
+    	background: #60c7c1;
+    	text-decoration: none;
+    	transition: all 0.4s;
+    	line-height: normal;
+    	min-width: 120px;
+    	border: none;
+    	min-height: 40px;
+    	border-radius: 3px;
+    	margin: 0 5px;
+    }
+    .modal-confirm .btn-secondary {
+    	background: #c1c1c1;
+    }
+    .modal-confirm .btn-secondary:hover, .modal-confirm .btn-secondary:focus {
+    	background: #a8a8a8;
+    }
+    .modal-confirm .btn-danger {
+    	background: #f15e5e;
+    }
+    .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+    	background: #ee3535;
+    }
+    .trigger-btn {
+    	display: inline-block;
+    	margin: 100px auto;
+    }
+	</style>
 </head>
+
 <body>
-<div>
-      
-</div>
+		<div class="main">
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<div class="mb-3">
+						<h1 class="h3 d-inline align-middle">Нақлиёт</h1>
+						
+					</div>
+					<div class="row">
+						<div class="col-md-4 col-xl-3">
+							<div class="card mb-3">
+								<div class="card-header">
+									<h5 class="card-title mb-0">Маълумот дар бораи нақлиёт</h5>
+								</div>
+								<div class="card-body text-center">
+									<img src="~/img/avatars/bus_avatar.png" alt="Christina Mason" class="img-fluid rounded-circle mb-2" width="128" height="128" />
+									<h5 class="card-title mb-0">Нақлиёт</h5>
+								
+								</div>
+								<hr class="my-0" />
+								<div class="card-body text-center">
+									<h5 class="h6 card-title">Ронанда</h5>
+									<div class="mt-2">Ном @Model.Driver.DriverName</div>
+									<div class="mt-2 mb-2">Насаб @Model.Driver.DriverSurname </div>
+									 
+									<button type="button" class="btn btn-primary btn-sm" onclick="Edit()">Ивазкунӣ</button>
+									</div>
+							
+								<div class="card-body">
+									
+								</div>
+								
+							</div>
+						</div>
+
+						<div class="col-md-8 col-xl-9">
+							<div class="card">
+								<div class="card-header">
+
+									<h5 class="card-title mb-0">Ивазкунии маълумот</h5>
+								</div>
+								<form asp-action="UpdateBus" method="post"> 
+									<div class="card-body h-100 w-100">
+										<h6>Маълумоти асосӣ</h6>
+										<div class="d-flex align-items-start">
+											<div class="row flex-grow-1 flex-row">
+												<div class="col">
+													<div class="form-group">
+														<label for="Name">Рақами давлатӣ</label>
+														<input type="text" class="form-control" id="Name" asp-for="BusNum">
+														<input type="text" class="form-control" id="busId" asp-for="Id" hidden>	
+														<input type="text" class="form-control" id="DriverId" asp-for="DriverId" hidden>	
+														
+													</div>
+												</div>
+												<div class="col">
+													<div class="form-group">
+														<label for="SurName">Хатсайр</label>
+														<input type="text" class="form-control"  asp-for="RouteNum">
+													</div>
+												</div>
+											</div>
+										</div>
+									
+										<hr/>
+										<h6>Ҷойгиршавӣ</h6>
+										<div class="d-flex align-items-start pt-3">
+											<div class="row flex-grow-1 flex-row ">
+												<div class="col">
+													<label>Latitude</label>
+													<input type="text" id="lat" class="form-control" asp-for="Latitude">
+													
+												</div>
+												<div class="col">
+													<label>Longitude</label>
+													<input type="text" id="long" class="form-control" asp-for="Longitude"/>
+												</div>
+											</div>
+										
+										</div>
+										<hr/>
+										<div class="d-flex align-items-start pt-3">
+											<div class="row flex-grow-1 flex-row ">
+												<div class="col">
+													<label>Интихоб дар харита</label>
+													<div id="map" class="form-control" style="height: 500px;"></div>
+												</div>
+											
+											</div>
+										</div>
+										<hr/>
+									<div class="d-flex align-items-start pt-3">
+										
+										<div class="row flex-grow-1 flex-row ">
+											<div class="col">
+												<input type="submit" value="Сабт кардан" class="btn btn-primary" />
+											</div>
+											<div class="col">
+												<a href="#myModal" data-toggle="modal"id="myBtn" class="btn btn-danger">Хориҷ кардан</a>
+											</div>
+											
+										</div>
+
+									</div></div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</main>
+
+		</div>
+		<div id="myModal" class="modal fade">
+        	<div class="modal-dialog modal-confirm">
+        		<div class="modal-content">
+        			<div class="modal-header flex-column">
+        				<div class="icon-box">
+        					<i class="material-icons">&#xE5CD;</i>
+        				</div>						
+        				<h4 class="modal-title w-100">Шумо боварӣ доред??</h4>	
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        			</div>
+        			<div class="modal-body">
+        				<p>Шумо мехоҳед нақлиёт - @Model.BusNum ро аз система хориҷ намоед? </p>
+        			</div>
+        			<div class="modal-footer justify-content-center">
+        				<button type="button" class="btn btn-secondary" data-dismiss="modal">Бозгашт</button>
+        				<a href="/User/Delete/@Model.Id" class="btn btn-danger">Хориҷ кардан</a>
+        			</div>
+        		</div>
+        	</div>
+        </div>     
+<script>
+function Edit(){
+	window.location.href="/Driver/View/@Model.DriverId";
+}
+	let map;
+let marker;
+		function initMap() {
+			map = new google.maps.Map( document.getElementById( 'map' ), {
+				center: {
+					lat: 51.513329,
+					lng: -0.088950
+				},
+				zoom: 15
+			});
+		google.maps.event.addListener(map,'click',function(event){
+			if (marker!=null) {
+				marker.setPosition(event.latLng);
+				let lattext = document.getElementById("lat");
+				lattext.value = event.latLng.lat()
+				let longtext = document.getElementById("long");
+				longtext.value = event.latLng.lng();
+		
+			}
+			else {
+                addMarker(event.latLng);
+            }
+		
+		})
+
+		}
+		function addMarker(position) {
+			marker = new google.maps.Marker({position: position,map: map});
+		google.maps.event.addListener(marker,'click',function(event){
+			marker.setMap(null);
+			marker=null;
+			
+		
+		})
+		let lattext = document.getElementById("lat");
+		lattext.value = position.lat();
+		console.log(lattext.value);
+		let longtext = document.getElementById("long");
+		longtext.value = position.lng();
+		
+		}
+		
+</script>
 </body>
 </html>

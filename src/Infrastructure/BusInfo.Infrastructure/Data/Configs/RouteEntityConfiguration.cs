@@ -4,11 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BusInfo.Infrastructure.Data.Configs;
 
-public class DriverEntityConfiguration:IEntityTypeConfiguration<Driver>
+public class RouteEntityConfiguration:IEntityTypeConfiguration<Route>
 {
-    public void Configure(EntityTypeBuilder<Driver> builder)
+    public void Configure(EntityTypeBuilder<Route> builder)
     {
-        builder.Property(p => p.Id).HasMaxLength(40);
+        builder
+            .HasMany(p => p.Places)
+            .WithMany();
         builder.HasKey(p => p.Id);
     }
 }

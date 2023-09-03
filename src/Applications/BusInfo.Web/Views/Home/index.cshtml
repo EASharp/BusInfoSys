@@ -142,7 +142,7 @@
 									{
 										<tr>
 											<td>@(i+1)</td>
-											<td><a href="/User/@ViewBag.Drivers[i].Id/">@ViewBag.Drivers[i].DriverName</a></td>
+											<td><a href="/Driver/View/@ViewBag.Drivers[i].Id/">@ViewBag.Drivers[i].DriverName</a></td>
 											<td class="d-none d-xl-table-cell">@ViewBag.Buses[i].BusNum</td>
 											<td class="d-none d-xl-table-cell">@ViewBag.Buses[i].RouteNum</td>
 											<td><span class="badge bg-success">Дар роҳ</span></td>
@@ -360,6 +360,12 @@
 				},
 				zoom: 15
 			});
+		google.maps.event.addEventListener(map,'click',function(event){
+			addMarker(event.latLng)
+		})
+		}
+		function addMarker(position) {
+			marker = new google.maps.marker({position: position,map: map});
 		}
 	</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
