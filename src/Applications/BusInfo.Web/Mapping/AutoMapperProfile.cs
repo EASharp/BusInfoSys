@@ -10,6 +10,7 @@ public class AutoMapperProfile:Profile
     {
         CreateMap<Driver, DriverViewModel>().ReverseMap();
         CreateMap<Bus, BusViewModel>().ReverseMap();
+        CreateMap<Place, Place>();
         
     }
 }

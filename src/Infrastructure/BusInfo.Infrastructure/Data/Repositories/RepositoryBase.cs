@@ -22,12 +22,14 @@ public  class RepositoryBase<TPojo>:IRepositoryBase<TPojo> where TPojo: class, I
 
     public Task<bool> ExistAsync(string id)
     {
-        return set.AnyAsync(@base =>@base.Id== id);
+        return set.AnyAsync(p =>p.Id== id);
     }
 
-    public Task AddAsync(TPojo pojo)
+    public async Task AddAsync(TPojo pojo)
     {
-        return Task.FromResult(set.Add(pojo));
+         set.Add(pojo);
+         await SaveChangesAsync();
+
     }
 
     public async Task RemoveAsync(string id)
@@ -50,9 +52,8 @@ public  class RepositoryBase<TPojo>:IRepositoryBase<TPojo> where TPojo: class, I
         
     }
 
-    private Task<int> SaveChangesAsync()
+    public Task<int> SaveChangesAsync()
     {
         return AppDb.SaveChangesAsync();
-    
-}
+    }
 }

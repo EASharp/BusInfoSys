@@ -8,5 +8,6 @@ public interface IRepositoryBase<TPojo> where TPojo: ITypeBase
     Task RemoveAsync(string id);
     public Task<TPojo> UpdateAsync(TPojo pojo);
     Task<List<TPojo>> ToListAsync();
-    
+    Task<int> SaveChangesAsync();
+
 }
