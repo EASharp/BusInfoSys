@@ -1,6 +1,6 @@
 namespace BusInfo.Core.Interfaces.Repositories;
 
-public interface IRepositoryBase<TPojo> where TPojo: ITypeBase
+public interface IRepositoryBase<TPojo> where TPojo : ITypeBase
 {
     Task<TPojo> GetByIdAsync(string id);
     Task<bool> ExistAsync(string id);
@@ -9,5 +9,4 @@ public interface IRepositoryBase<TPojo> where TPojo: ITypeBase
     public Task<TPojo> UpdateAsync(TPojo pojo);
     Task<List<TPojo>> ToListAsync();
     Task<int> SaveChangesAsync();
-
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BusInfo.Infrastructure.Data.Configs;
 
-public class RouteEntityConfiguration:IEntityTypeConfiguration<Route>
+public class RouteEntityConfiguration : IEntityTypeConfiguration<Route>
 {
     public void Configure(EntityTypeBuilder<Route> builder)
     {

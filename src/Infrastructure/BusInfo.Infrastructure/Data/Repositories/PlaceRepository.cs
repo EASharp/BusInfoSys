@@ -4,11 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusInfo.Infrastructure.Data.Repositories;
 
-public class PlaceRepository:RepositoryBase<Place>, IPlaceRepository   
-    
+public class PlaceRepository : RepositoryBase<Place>, IPlaceRepository
+
 {
     public PlaceRepository(AppDb dbContext) : base(dbContext)
     {
     }
-    
 }

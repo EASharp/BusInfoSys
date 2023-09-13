@@ -4,13 +4,12 @@ using BusInfo.Web.Models;
 
 namespace BusInfo.Web.Mapping;
 
-public class AutoMapperProfile:Profile
+public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
         CreateMap<Driver, DriverViewModel>().ReverseMap();
         CreateMap<Bus, BusViewModel>().ReverseMap();
         CreateMap<Place, Place>();
-        
     }
 }

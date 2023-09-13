@@ -4,16 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusInfo.Infrastructure.Data.Repositories;
 
-public class BusRepository:RepositoryBase<Bus>,IRepositoryBase<Bus>,IBusRepository
+public class BusRepository : RepositoryBase<Bus>, IRepositoryBase<Bus>, IBusRepository
 {
     public BusRepository(AppDb appDb) : base(appDb)
     {
-            
     }
 
     public Task<Bus> GetByDriverIdAsync(string driverId)
     {
-        return set.FirstAsync(bus =>bus.DriverId==driverId); 
+        return set.FirstAsync(bus => bus.DriverId == driverId);
     }
 
     public Task<Bus> GetWithPlaces(string busId)

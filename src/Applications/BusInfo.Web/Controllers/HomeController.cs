@@ -11,20 +11,20 @@ public class HomeController : Controller
     private readonly IBusRepository _busRepository;
     private readonly IDriverRepository _driverRepository;
 
-    public HomeController(ILogger<HomeController> logger,IBusRepository busRepository,IDriverRepository driverRepository)
+    public HomeController(ILogger<HomeController> logger, IBusRepository busRepository,
+        IDriverRepository driverRepository)
     {
         _logger = logger;
         _busRepository = busRepository;
         _driverRepository = driverRepository;
-        
     }
 
     public async Task<ViewResult> Index()
     {
         ViewBag.Buses = await _busRepository.ToListAsync();
-        
+
         ViewBag.Drivers = await _driverRepository.ToListAsync();
-        
+
         return View();
     }
 

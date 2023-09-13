@@ -9,6 +9,7 @@ public class AuthController : Controller
     {
         return View();
     }
+
     public IActionResult SignUp()
     {
         return View();

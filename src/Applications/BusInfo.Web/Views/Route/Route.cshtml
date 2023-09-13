@@ -1,123 +1,182 @@
-@using Microsoft.EntityFrameworkCore.Infrastructure
 @model BusInfo.Core.Classes.Route;
 
 @{
     Layout = "_Layout";
 }
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-	
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 
-	<link href="~/css/app.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+<link href="~/css/app.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 
 <main class="content">
-	<div class="container-fluid p-0">
+    <div class="container-fluid p-0">
 
-		<h1 class="h3 mb-3">Рӯйхати истгоҳҳо барои хатсайри</h1>
+        <h1 class="h3 mb-3">Рӯйхати истгоҳҳо барои хатсайри</h1>
 
-		<div class="row">
-			<div class="col-12">
-				<div class="card">
-					<div class="card-header">
-						<h5 class="card-title mb-0">Empty card</h5>
-						<div class="">
-							<button class="btn-primary btn pull-right">Дохил кунӣ</button>
-							</div>
-					</div>
-					<div class="card-body">
-									
-						<table class="table table-hover my-0">
-							<thead>
-							<tr>
-								<th>#</th>
-								<th>Номи истгоҳ</th>
-								<th>Latitude</th>
-								<th>Longitude</th>
-								<th>Диганкуни</th>
-										
-							</tr>
-							</thead>
-							<tbody>
-							@for (var i = 0; i < Model.Places.Count; i++)
-							{
-								<tr class="clickable-row" data-href="#mymodal" data-toggle="modal">
-									<td>@(i+1)</td>
-									<td id="placeName-@i">@Model.Places[i].PlaceName</td>
-									<td id="latitude-@i">@Model.Places[i].Latitude</td>
-									<td id="longitude-@i">@Model.Places[i].Longitude</td>
-									<td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" id="editBtn-@i">Дигаркунӣ</button>
-									<input type="hidden" value=@Model.Places[i].Id id="pId-@i"/>
-								</tr>
-							}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Empty card</h5>
+                        <div class="">
+                            <button class="btn-primary btn pull-right" data-bs-toggle="modal" data-bs-target="#exampleModal" id="pAdd" name="pAdd">Дохилкунӣ</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
 
-	</div>
-</main><div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
-           <div class="modal-content">
-             <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-             </div>
-	           <div class="modal-body">
-		           @{
-			           
-		           }
-		           <div id="map" style="height: 300px;"></div>
-		           <form method="post" id="form" asp-action="UpdateRoute">
-			           <div class="form-group mt-2">
-				           <label class="form-label" for="Latitude">Latitude</label>
-				           <input type="text" id="lat" name="Latitude" class="form-control"/>
-			           </div>
-			           <div class="form-group mt-2">
-				           <label class="form-label" for="Longitude">Longitude</label>
-				           <input id="long" type="text" class="form-control" name="Longitude"/>
-			           </div>
-			           <div class="form-group mt-2">
-				           <label class="form-label" for="PlaceName">Номи истгоҳ</label>
-				           <input type="text" id="pName"class="form-control" name="PlaceName"/>
-			           </div>
-			           <div class="modal-footer">
-				           <input type="hidden" name="Id" id="Id"/>
-				           <input type="hidden" value="@Model.Number" name="routeNum" id="routeNum"/>
-				           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				           <button type="button" class="btn btn-primary" onclick="submitStudent()">Сабт кардан</button>
-			           </div>
-		           </form>
-	           </div>
-            
-           </div>
-         </div>
-       </div>
+                        <table class="table table-hover my-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Номи истгоҳ</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+	                            <th>Диганкуни</th>
+	                      
+	                            <th>Хориҷкунӣ</th>
+                            </tr>
+                            </thead>
+                            <tbody id="body">
+                            @for (var i = 0; i < Model.Places.Count; i++)
+                            {
+                                <tr class="clickable-row" data-href="#mymodal" id="row-@i "data-toggle="modal">
+                                    <td>@(i + 1)</td>
+                                    <td id="placeName-@i">@Model.Places[i].PlaceName</td>
+                                    <td id="latitude-@i">@Model.Places[i].Latitude</td>
+                                    <td id="longitude-@i">@Model.Places[i].Longitude</td>
+                                    <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" id="editBtn-@i">Дигаркунӣ</button>
+                                    <input type="hidden" value=@Model.Places[i].Id id="pId-@i"/>
+                                    <td><button type="button" class="btn btn-danger btn-sm" id="deleteBtn-@i" onclick="deletePlace(document.getElementById('pId-@i').value,@i)">Хориҷкунӣ</button></td>
+                                    
+                                </tr>
+                            }
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div id="map" style="height: 300px;"></div>
+                <form method="post" id="form" asp-action="ManagePlaceInRoute">
+	                <div class="form-group mt-2">
+		                <input type="hidden" id="isAdd" name="isAdd" value="false"/>
+		                <label class="form-label" for="Latitude">Latitude</label>
+		                <input type="text" id="lat" name="Latitude" class="form-control"/>
+	                </div>
+                    <div class="form-group mt-2">
+                        <label class="form-label" for="Longitude">Longitude</label>
+                        <input id="long" type="text" class="form-control" name="Longitude"/>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label class="form-label" for="PlaceName">Номи истгоҳ</label>
+                        <input type="text" id="pName"class="form-control" name="PlaceName"/>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="Id" id="Id"/>
+                        <input type="hidden" value="@Model.Number" name="routeNum" id="routeNum"/>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitStudent()">Сабт кардан</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
-<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript">
-var pnum;
+var pnum=@Model.Places.Count;
  function submitStudent() {
         var data = $("#form").serialize();
         console.log(data);
-      
+		var isAdd = document.getElementById("isAdd").value;
         $.ajax({
             type: 'POST',
-            url: '/Route/UpdateRoute/',
+            url: '/Route/ManagePlaceInRoute/',
             data: data,
             success: function (result) {
 				console.log(result);
+	
 				var moda=document.getElementById('exampleModal');
 				bootstrap.Modal.getInstance(moda).hide();
-                document.getElementById("placeName-"+pnum).innerText=document.getElementById("pName").value
+				
+        
+				 if (isAdd==="true") {
+					 document.getElementById("isAdd").value=false;
+					 pnum = pnum+1;
+					 console.log(pnum);
+					var row = document.createElement("tr")
+					var ncell = document.createElement("td")
+					ncell.innerText  = pnum;
+					row.appendChild(ncell);
+					var pcell = document.createElement("td")
+					pcell.id = "placeName-"+pnum;
+					row.appendChild(pcell);
+					var latcell = document.createElement("td")
+                    latcell.id = "latitude-"+pnum;
+                    row.appendChild(latcell);
+					var longcell = document.createElement("td")
+                    longcell.id = "longitude-"+pnum;
+					row.appendChild(longcell);
+					var editbtn = document.createElement("button")
+                    editbtn.id = "editBtn-"+pnum;
+					editbtn.innerText="Дигаркунӣ";
+					editbtn.classList.add("btn")
+					editbtn.classList.add("btn-primary");
+					editbtn.classList.add("btn-sm");
+					editbtn.setAttribute("data-bs-toggle","modal")
+					editbtn.setAttribute("data-bs-target","#exampleModal");
+					row.appendChild(editbtn);
+				var	editcell = document.createElement("td");
+				var deletebtn = document.createElement("button");
+				var inputId = document.createElement("input");
+                inputId.type = "hidden";
+                inputId.id = "pId-"+pnum;
+                inputId.name = "Id";
+				inputId.value =result.toString();
+                row.appendChild(inputId);				
+				deletebtn.id = "deleteBtn-"+pnum;
+				deletebtn.innerText="Хориҷкунӣ"
+				deletebtn.classList.add("btn")
+				deletebtn.classList.add("btn-sm");
+                deletebtn.classList.add("btn-danger");
+				$(document).on("click","#deleteBtn-"+pnum,function() {
+					deletePlace(inputId.value,pnum)
+				})
+				var deletecell = document.createElement("td");
+				deletecell.appendChild(deletebtn);	
+				editcell.appendChild(editbtn);
+                				
+                row.appendChild(editcell);
+				row.appendChild(deletecell);
+				
+				
+					document.getElementById("body").appendChild(row);
+				}
+				document.getElementById("placeName-"+pnum).innerText=document.getElementById("pName").value
 				document.getElementById("latitude-"+pnum).innerText=document.getElementById("lat").value
-                document.getElementById("longitude-"+pnum).innerText=document.getElementById("long").value;			
+                document.getElementById("longitude-"+pnum).innerText=document.getElementById("long").value;		
+				
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -168,18 +227,44 @@ var pnum;
  		longtext.value = position.lng();	
  		} 
   var exampleModal = document.getElementById('exampleModal')
-  exampleModal.addEventListener('show.bs.modal', function (event) {
-    var modalTitle = exampleModal.querySelector('.modal-title')
-    modalTitle.textContent = 'Харита'
-    pnum = event.relatedTarget.id.split('-')[1];
-	var latR = document.getElementById("latitude-"+pnum).innerText;
-	var longR = document.getElementById("longitude-"+pnum).innerText;
-	document.getElementById("Id").value =document.getElementById("pId-"+pnum).value
-	var placeNameR = document.getElementById("placeName-"+pnum).innerText;
-	document.getElementById("lat").value = latR;
-	document.getElementById("long").value = longR;
-	document.getElementById("pName").value = placeNameR;
-    initMap(latR,longR);  
-	addMarker(new google.maps.LatLng(latR, longR));
+  $("#myModal").on("hidden.bs.modal", function () {
+      document.getElementById("isAdd").value = false;
   });
+  exampleModal.addEventListener('show.bs.modal', function (event) {
+	  
+	  var latR=0
+	  var longR=0
+	  var modalTitle = exampleModal.querySelector('.modal-title')
+	  if (event.relatedTarget.id==='pAdd') {
+		  document.getElementById("isAdd").value=true;
+		  
+		  initMap(0,0);
+	  }
+	  else{ 
+		  pnum = event.relatedTarget.id.split('-')[1];
+		  latR = document.getElementById("latitude-"+pnum).innerText;
+		  longR = document.getElementById("longitude-"+pnum).innerText;
+		  document.getElementById("Id").value =document.getElementById("pId-"+pnum).value
+		  var placeNameR = document.getElementById("placeName-"+pnum).innerText;
+		  document.getElementById("lat").value = latR;
+		  document.getElementById("long").value = longR;
+		  document.getElementById("pName").value = placeNameR;
+		   
+	  }
+	  initMap(latR,longR)
+	  addMarker(new google.maps.LatLng(latR, longR)); 
+  });
+		 function deletePlace(id,num) {
+			$.ajax({
+              type: "DELETE",
+              url: "/Route/DeletePlaceInRoute/" + @Model.Number+"/"+id,
+              success: function(data) {
+			
+				  location.reload();
+              },
+              error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+              }
+            }); 
+		 }
 </script>

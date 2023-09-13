@@ -12,9 +12,9 @@ public static class Loader
     {
         services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
         services.AddTransient<AppDb>();
-        services.AddScoped(typeof(IBusRepository),typeof(BusRepository));
-        services.AddScoped(typeof(IPlaceRepository),typeof(PlaceRepository));
-        services.AddScoped(typeof(IDriverRepository),typeof(DriverRepository));
-        services.AddScoped(typeof(IRouteRepository),typeof(RouteRepository));
+        services.AddScoped(typeof(IBusRepository), typeof(BusRepository));
+        services.AddScoped(typeof(IPlaceRepository), typeof(PlaceRepository));
+        services.AddScoped(typeof(IDriverRepository), typeof(DriverRepository));
+        services.AddScoped(typeof(IRouteRepository), typeof(RouteRepository));
     }
 }

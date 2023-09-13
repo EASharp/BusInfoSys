@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BusInfo.Infrastructure.Data.Configs;
 
-public class DriverEntityConfiguration:IEntityTypeConfiguration<Driver>
+public class DriverEntityConfiguration : IEntityTypeConfiguration<Driver>
 {
     public void Configure(EntityTypeBuilder<Driver> builder)
     {

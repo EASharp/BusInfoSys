@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BusInfo.Infrastructure.Data.Configs;
 
-public class BusEntityConfiguration:IEntityTypeConfiguration<Bus>
+public class BusEntityConfiguration : IEntityTypeConfiguration<Bus>
 {
     public virtual void Configure(EntityTypeBuilder<Bus> builder)
     {
@@ -14,7 +14,5 @@ public class BusEntityConfiguration:IEntityTypeConfiguration<Bus>
         builder.Property(p => p.DriverId).HasMaxLength(40);
         builder.HasIndex(p => p.BusNum);
         builder.HasIndex(p => p.RouteNum);
-
-
     }
 }

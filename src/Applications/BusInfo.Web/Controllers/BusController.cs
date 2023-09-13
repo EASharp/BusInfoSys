@@ -12,29 +12,30 @@ public class BusController : Controller
     private readonly IMapper _mapper;
     private readonly IBusRepository _busRepository;
     private readonly IDriverRepository _driverRepository;
-    public BusController(IMapper mapper, IBusRepository busRepository,IDriverRepository driverRepository)
+
+    public BusController(IMapper mapper, IBusRepository busRepository, IDriverRepository driverRepository)
     {
         _busRepository = busRepository;
         _driverRepository = driverRepository;
-        _mapper=mapper;
+        _mapper = mapper;
     }
-  
+
     [Route("/Bus/View/{busId}")]
     public async Task<ViewResult> Bus(string busId)
     {
         var bus = await _busRepository.GetByIdAsync(busId);
-        var driver=await _driverRepository.GetByIdAsync(bus.DriverId);
+        var driver = await _driverRepository.GetByIdAsync(bus.DriverId);
         var viewModel = _mapper.Map<BusViewModel>(bus);
         viewModel.Driver = driver;
         return View(viewModel);
     }
 
-    [HttpPost] 
+    [HttpPost]
     public async Task<IActionResult> UpdateBus(BusViewModel busViewModel)
     {
         var bus = _mapper.Map<Bus>(busViewModel);
         await _busRepository.UpdateAsync(bus);
-        return RedirectToAction("Bus", "Bus", new { busId = bus.Id});
+        return RedirectToAction("Bus", "Bus", new { busId = bus.Id });
     }
 
     [Route("/Bus/Delete/{busId}")]

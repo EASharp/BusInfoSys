@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusInfo.Infrastructure.Data.Repositories;
 
-public class DriverRepository:RepositoryBase<Driver>,IDriverRepository
+public class DriverRepository : RepositoryBase<Driver>, IDriverRepository
 {
     public DriverRepository(AppDb appDb) : base(appDb)
     {

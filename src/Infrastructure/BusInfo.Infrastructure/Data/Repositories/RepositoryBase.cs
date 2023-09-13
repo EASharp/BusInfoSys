@@ -4,52 +4,49 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusInfo.Infrastructure.Data.Repositories;
 
-public  class RepositoryBase<TPojo>:IRepositoryBase<TPojo> where TPojo: class, ITypeBase
+public class RepositoryBase<TPojo> : IRepositoryBase<TPojo> where TPojo : class, ITypeBase
 {
     protected readonly AppDb AppDb;
-    protected  readonly DbSet<TPojo> set;
+    protected readonly DbSet<TPojo> set;
 
     protected RepositoryBase(AppDb appDb)
     {
         set = appDb.Set<TPojo>();
         AppDb = appDb;
     }
-    
+
     public Task<TPojo> GetByIdAsync(string id)
     {
-       return  set.FirstAsync(p => p.Id == id);
+        return set.FirstAsync(p => p.Id == id);
     }
 
     public Task<bool> ExistAsync(string id)
     {
-        return set.AnyAsync(p =>p.Id== id);
+        return set.AnyAsync(p => p.Id == id);
     }
 
     public async Task AddAsync(TPojo pojo)
     {
-         set.Add(pojo);
-         await SaveChangesAsync();
-
+        set.Add(pojo);
+        await SaveChangesAsync();
     }
 
     public async Task RemoveAsync(string id)
     {
-      
-        set.Remove(await set.FirstAsync(s=>s.Id==id));
+        set.Remove(await set.FirstAsync(s => s.Id == id));
         await SaveChangesAsync();
-
     }
 
     public Task<List<TPojo>> ToListAsync()
     {
         return set.ToListAsync();
     }
+
     public async Task<TPojo> UpdateAsync(TPojo pojo)
     {
         set.Update(pojo);
         await SaveChangesAsync();
         return pojo;
-        
     }
 
     public Task<int> SaveChangesAsync()
