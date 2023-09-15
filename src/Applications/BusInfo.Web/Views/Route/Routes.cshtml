@@ -1,0 +1,195 @@
+@model List<BusInfo.Core.Classes.Route>
+
+@{
+  
+    Layout = "_Layout";
+}
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3">Рӯйхати хатсайрҳо</h1>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="">
+                            <button class="btn-primary btn pull-right" data-bs-toggle="modal" data-bs-target="#exampleModal" id="pAdd" name="pAdd">Дохилкунӣ</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <table class="table table-hover my-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Номи хатсайр</th>
+                                <th>Шумораи истгоҳҳо</th>
+                              
+	                            <th>Диганкуни</th>
+	                      
+	                            <th>Хориҷкунӣ</th>
+                            </tr>
+                            </thead>
+                            <tbody id="body">
+                            @for (var i = 0; i < Model.Count; i++)
+                            {
+                                <tr class="clickable-row" data-href="#mymodal" id="row-@i" data-toggle="modal">
+                                    <td>@(i + 1)</td>
+                                    <td id="routeNum-@i">@Model[i].Name</td>
+	                                <td ><a id="placesCount-@i" href="/Route/View/@Model[i].Name">@Model[i].Places.Count</a></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" id="editBtn-@i">Дигаркунӣ</button>
+                                    <input type="hidden" value=@Model[i].Id id="pId-@i"/>
+                                    <td><button type="button" class="btn btn-danger btn-sm" id="deleteBtn-@i" onclick="deleteRoute(document.getElementById('pId-@i').value)">Хориҷкунӣ</button></td>
+                                    
+                                </tr>
+                            }
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Дохилкунӣ/ивазкунии хатсайр</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="form" asp-action="ManageRoute">
+                    <input type="hidden" id="isAdd" name="isAdd" value="false"/>
+                    <div class="form-group mt-2">
+                        <label class="form-label" for="Route">Номи хатсайр</label>
+                        <input type="text" id="Name" class="form-control" name="Name"/>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="Id" id="Id"/>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitRoute()">Сабт кардан</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+var pnum = @Model.Count;
+function submitRoute() {
+        var data = $("#form").serialize();
+        console.log(data);
+		var isAdd = document.getElementById("isAdd").value;
+        $.ajax({
+            type: 'POST',
+            url: '/Route/ManageRoute/',
+            data: data,
+            success: function (result) {
+				console.log(result);
+	
+				var moda=document.getElementById('exampleModal');
+				bootstrap.Modal.getInstance(moda).hide();
+				
+        
+				 if (isAdd==="true") {
+					 document.getElementById("isAdd").value=false;
+					 pnum = parseInt(pnum)+1;
+					 console.log(pnum);
+					var row = document.createElement("tr")
+					var ncell = document.createElement("td")
+					ncell.innerText  = pnum;
+					row.appendChild(ncell);
+					var rcell = document.createElement("td")
+					rcell.id = "routeNum-"+pnum;
+				
+					row.appendChild(rcell);
+					var pcell = document.createElement("td")
+					var acell = document.createElement("a")
+					acell.id = "placesCount-"+pnum
+					acell.innerText =0;
+					pcell.appendChild(acell);
+					row.appendChild(pcell);
+					
+					
+                    var editbtn = document.createElement("button")
+                    editbtn.id = "editBtn-"+pnum;
+					editbtn.innerText="Дигаркунӣ";
+					editbtn.classList.add("btn")
+					editbtn.classList.add("btn-primary");
+					editbtn.classList.add("btn-sm");
+					editbtn.setAttribute("data-bs-toggle","modal")
+					editbtn.setAttribute("data-bs-target","#exampleModal");
+					row.appendChild(editbtn);
+				var	editcell = document.createElement("td");
+				var deletebtn = document.createElement("button");
+				var inputId = document.createElement("input");
+                inputId.type = "hidden";
+                inputId.id = "pId-"+pnum;
+                inputId.name = "Id";
+				inputId.value =result.toString();
+                row.appendChild(inputId);				
+				deletebtn.id = "deleteBtn-"+pnum;
+				deletebtn.innerText="Хориҷкунӣ"
+				deletebtn.classList.add("btn")
+				deletebtn.classList.add("btn-sm");
+                deletebtn.classList.add("btn-danger");
+				$(document).on("click","#deleteBtn-"+pnum,function() {
+					deleteRoute(inputId.value)
+				})
+				var deletecell = document.createElement("td");
+				deletecell.appendChild(deletebtn);	
+				editcell.appendChild(editbtn);
+                				
+                row.appendChild(editcell);
+				row.appendChild(deletecell);
+				
+				
+					document.getElementById("body").appendChild(row);
+				}
+				document.getElementById("routeNum-"+pnum).innerText=document.getElementById("Name").value		
+				document.getElementById("placesCount-"+pnum).href="/Route/View/"+document.getElementById("Name").value
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+                console.log('Failed ');
+            }
+        });
+        return false;
+    }
+var exampleModal = document.getElementById('exampleModal')
+  $("#myModal").on("hidden.bs.modal", function () {
+      document.getElementById("isAdd").value = false;
+  });
+  exampleModal.addEventListener('show.bs.modal', function (event) {
+	  if (event.relatedTarget.id==='pAdd') {
+		  document.getElementById("isAdd").value=true;
+	  }
+	  else{ 
+		  pnum = event.relatedTarget.id.split('-')[1];
+		  var routeNum = document.getElementById("routeNum-"+pnum).innerText;
+		  document.getElementById("Id").value =document.getElementById("pId-"+pnum).value
+		  document.getElementById("Name").value = routeNum;
+		   
+	  }
+  });
+   function deleteRoute(id) {
+  			$.ajax({
+                type: "DELETE",
+                url: "/Route/Delete/" +id,
+                success: function(data) {
+  			
+  				  location.reload();
+                },
+                error: function(xhr, status, error) {
+                  console.log(xhr.responseText);
+                }
+              }); 
+  		 }
+
+</script>

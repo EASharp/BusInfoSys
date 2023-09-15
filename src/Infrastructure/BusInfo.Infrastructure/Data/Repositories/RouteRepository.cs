@@ -10,13 +10,18 @@ public class RouteRepository : RepositoryBase<Route>, IRouteRepository
     {
     }
 
-    public Task<Route> GetByNumWithPlacesAsync(int num)
+    public Task<Route> GetByNumWithPlacesAsync(string name)
     {
-        return set.Include(p => p.Places).FirstAsync(p => p.Number == num);
+        return set.Include(p => p.Places).FirstAsync(p => p.Name == name);
     }
 
-    public Task<Route> GetByNumberAsync(int number)
+    public Task<List<Route>> ToListWithPlacesAsync()
     {
-        return set.IgnoreAutoIncludes().FirstAsync(p => p.Number == number);
+        return Task.FromResult(set.Include(p => p.Places).ToList());
+    }
+
+    public Task<Route> GetByNumberAsync(string name)
+    {
+        return set.IgnoreAutoIncludes().FirstAsync(p => p.Name == name);
     }
 }

@@ -25,10 +25,16 @@ public class RepositoryBase<TPojo> : IRepositoryBase<TPojo> where TPojo : class,
         return set.AnyAsync(p => p.Id == id);
     }
 
+    public Task<TPojo> AddAsync<T>(TPojo pojo)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task AddAsync(TPojo pojo)
     {
         set.Add(pojo);
-        await SaveChangesAsync();
+        await AppDb.SaveChangesAsync();
+        
     }
 
     public async Task RemoveAsync(string id)
@@ -36,6 +42,7 @@ public class RepositoryBase<TPojo> : IRepositoryBase<TPojo> where TPojo : class,
         set.Remove(await set.FirstAsync(s => s.Id == id));
         await SaveChangesAsync();
     }
+    
 
     public Task<List<TPojo>> ToListAsync()
     {
@@ -49,8 +56,10 @@ public class RepositoryBase<TPojo> : IRepositoryBase<TPojo> where TPojo : class,
         return pojo;
     }
 
-    public Task<int> SaveChangesAsync()
+    public  Task<int> SaveChangesAsync()
     {
-        return AppDb.SaveChangesAsync();
+        
+       return AppDb.SaveChangesAsync();
+      
     }
 }

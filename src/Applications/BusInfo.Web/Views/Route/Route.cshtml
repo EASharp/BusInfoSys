@@ -4,7 +4,7 @@
     Layout = "_Layout";
 }
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -16,13 +16,13 @@
 <main class="content">
     <div class="container-fluid p-0">
 
-        <h1 class="h3 mb-3">Рӯйхати истгоҳҳо барои хатсайри</h1>
+        <h1 class="h3 mb-3">Рӯйхати истгоҳҳо барои хатсайри @Model.Name</h1>
 
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Empty card</h5>
+     
                         <div class="">
                             <button class="btn-primary btn pull-right" data-bs-toggle="modal" data-bs-target="#exampleModal" id="pAdd" name="pAdd">Дохилкунӣ</button>
                         </div>
@@ -69,7 +69,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Дохилкунӣ/ивазкунии истгоҳ</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -91,7 +91,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="Id" id="Id"/>
-                        <input type="hidden" value="@Model.Number" name="routeNum" id="routeNum"/>
+                        <input type="hidden" value="@Model.Name" name="routeNum" id="routeNum"/>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" onclick="submitStudent()">Сабт кардан</button>
                     </div>
@@ -101,9 +101,7 @@
         </div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
-<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
+
 <script type="text/javascript">
 var pnum=@Model.Places.Count;
  function submitStudent() {
@@ -257,7 +255,7 @@ var pnum=@Model.Places.Count;
 		 function deletePlace(id,num) {
 			$.ajax({
               type: "DELETE",
-              url: "/Route/DeletePlaceInRoute/" + @Model.Number+"/"+id,
+              url: "/Route/DeletePlaceInRoute/" + "@Model.Name"+"/"+id,
               success: function(data) {
 			
 				  location.reload();
