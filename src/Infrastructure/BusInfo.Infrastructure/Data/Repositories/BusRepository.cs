@@ -19,4 +19,11 @@ public class BusRepository : RepositoryBase<Bus>, IRepositoryBase<Bus>, IBusRepo
     {
         throw new NotImplementedException();
     }
+
+    public async Task<bool> IsDriverIdExistAsync(string driverId)
+    {
+        if (await set.FirstOrDefaultAsync(bus => bus.DriverId == driverId)==null)
+            return false;
+        return true;
+    }
 }

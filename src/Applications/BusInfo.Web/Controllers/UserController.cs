@@ -3,6 +3,7 @@ using BusInfo.Core.Classes;
 using BusInfo.Core.Interfaces.Repositories;
 using BusInfo.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Route = BusInfo.Core.Classes.Route;
 
 namespace BusInfo.Web.Controllers;
 
@@ -25,16 +26,44 @@ public class UserController : Controller
         var driver = await _userDriverRepository.GetByIdAsync(userid);
 
         var viewModel = _mapper.Map<DriverViewModel>(driver);
-        var bus = await _busRepository.GetByDriverIdAsync(userid);
-        viewModel.Bus = bus;
+        if (await _busRepository.IsDriverIdExistAsync(userid))
+        {
+            var bus = await _busRepository.GetByDriverIdAsync(userid);
+            viewModel.Bus = bus;
+        }
+
         return View(viewModel);
+    }
+
+    [Route("Driver/Add/")]
+    public Task<ViewResult> Profile()
+    {
+        return Task.FromResult(View(new DriverViewModel { Id = Guid.NewGuid().ToString("N"),IsCreate = true}));
+        
+    }
+
+    [Route("/Drivers")]
+    public async Task<ViewResult> UserList()
+    {
+        var list =await  _userDriverRepository.ToListAsync();
+        return View(list);
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdateProfile(DriverViewModel driverViewModel)
     {
+        
         var driver = _mapper.Map<Driver>(driverViewModel);
-        await _userDriverRepository.UpdateAsync(driver);
+        if (driverViewModel.IsCreate)
+        {
+            await _userDriverRepository.AddAsync(driver);
+        }
+        else
+        {
+            await _userDriverRepository.UpdateAsync(driver);       
+        }
+     
+        
         return RedirectToAction("Profile", "User", new { userid = driverViewModel.Id });
     }
 
@@ -42,6 +71,6 @@ public class UserController : Controller
     public async Task<IActionResult> Delete(string userid)
     {
         await _userDriverRepository.RemoveAsync(userid);
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("UserList", "User");
     }
 }

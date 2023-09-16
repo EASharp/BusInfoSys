@@ -25,8 +25,10 @@ public class BusController : Controller
     {
         var bus = await _busRepository.GetByIdAsync(busId);
         var driver = await _driverRepository.GetByIdAsync(bus.DriverId);
+        ViewBag.DriverList = await _driverRepository.ToListAsync();
         var viewModel = _mapper.Map<BusViewModel>(bus);
         viewModel.Driver = driver;
+        
         return View(viewModel);
     }
 
@@ -34,7 +36,10 @@ public class BusController : Controller
     public async Task<IActionResult> UpdateBus(BusViewModel busViewModel)
     {
         var bus = _mapper.Map<Bus>(busViewModel);
-        await _busRepository.UpdateAsync(bus);
+        if (busViewModel.IsCreate)
+            await _busRepository.AddAsync(bus);
+        else
+            await _busRepository.UpdateAsync(bus);
         return RedirectToAction("Bus", "Bus", new { busId = bus.Id });
     }
 
@@ -43,5 +48,21 @@ public class BusController : Controller
     {
         await _busRepository.RemoveAsync(busId);
         return RedirectToAction("Index", "Home");
+    }
+
+    [Route("/Buses")]
+    public async Task<IActionResult> BusList()
+    {
+        var list = await _busRepository.ToListAsync();
+        return View(list);
+    }
+
+    [Route("/Bus/Add")]
+    public async Task<IActionResult> Bus()
+    {
+        ViewBag.DriverList = await _driverRepository.ToListAsync();
+        
+        return View(new BusViewModel {IsCreate = true,Id = Guid.NewGuid().ToString("N")});
+        
     }
 }

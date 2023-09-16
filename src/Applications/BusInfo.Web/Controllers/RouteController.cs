@@ -53,8 +53,8 @@ public class RouteController : Controller
         await _routeRepository.SaveChangesAsync();
         return Ok();
     }
-
-    public async Task<ViewResult> Routes()
+    [Route("/Routes")]
+    public async Task<ViewResult> RouteList()
     {
         var model= await _routeRepository.ToListWithPlacesAsync();
         return View(model);
