@@ -7,8 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\BusInfo.Core\BusInfo.Core.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BusInfo.Infrastructure\BusInfo.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

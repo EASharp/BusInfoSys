@@ -7,7 +7,7 @@ public class Bus : ITypeBase
     public string DriverId { get; set; }
     public string Id { get; set; }
     public string BusNum { get; set; }
-    public int RouteNum { get; set; }
+    public string RouteNum { get; set; }
     public string Latitude { get; set; }
     public string Longitude { get; set; }
 

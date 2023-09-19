@@ -1,8 +1,18 @@
 using BusInfo.Infrastructure;
 using BusInfo.Web.Mapping;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAuthentication(options => options.DefaultScheme=CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        
+        options.LoginPath = "/Auth/SignIn";
+        
+    });
+    
+builder.Services.AddAuthentication().AddIdentityCookies();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructureModule();
@@ -21,7 +31,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

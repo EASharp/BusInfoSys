@@ -2,6 +2,7 @@ using AutoMapper;
 using BusInfo.Core.Classes;
 using BusInfo.Core.Interfaces.Repositories;
 using BusInfo.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusInfo.Web.Controllers;
@@ -21,6 +22,7 @@ public class BusController : Controller
     }
 
     [Route("/Bus/View/{busId}")]
+    [Authorize]
     public async Task<ViewResult> Bus(string busId)
     {
         var bus = await _busRepository.GetByIdAsync(busId);
@@ -44,6 +46,7 @@ public class BusController : Controller
     }
 
     [Route("/Bus/Delete/{busId}")]
+    [Authorize]
     public async Task<RedirectToActionResult> DeleteBus(string busId)
     {
         await _busRepository.RemoveAsync(busId);
@@ -51,6 +54,7 @@ public class BusController : Controller
     }
 
     [Route("/Buses")]
+    [Authorize]
     public async Task<IActionResult> BusList()
     {
         var list = await _busRepository.ToListAsync();
@@ -58,6 +62,7 @@ public class BusController : Controller
     }
 
     [Route("/Bus/Add")]
+    [Authorize]
     public async Task<IActionResult> Bus()
     {
         ViewBag.DriverList = await _driverRepository.ToListAsync();

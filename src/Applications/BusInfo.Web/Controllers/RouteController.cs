@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusInfo.Core.Classes;
 using BusInfo.Core.Interfaces.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Route = BusInfo.Core.Classes.Route;
 
@@ -18,6 +19,7 @@ public class RouteController : Controller
     }
 
     [Route("Route/View/{routeNum}")]
+    [Authorize]
     public async Task<ViewResult> Route(string routeNum)
     {
         var route = await _routeRepository.GetByNumWithPlacesAsync(routeNum);
@@ -45,6 +47,7 @@ public class RouteController : Controller
 
     [HttpDelete]
     [Route("/Route/DeletePlaceInRoute/{routeNum}/{id}")]
+    [Authorize]
     public async Task<OkResult> DeletePlaceInRoute(string id, string routeNum)
     {
         var route = await _routeRepository.GetByNumWithPlacesAsync(routeNum);
@@ -60,6 +63,7 @@ public class RouteController : Controller
         return View(model);
     }
 [HttpPost]
+
     public async Task<OkObjectResult> ManageRoute(Route route, bool isAdd)
     {
   
@@ -81,6 +85,7 @@ public class RouteController : Controller
 
     [HttpDelete]
     [Route("/Route/Delete/{id}")]
+    [Authorize]
     public async Task<OkResult> DeleteRoute(string id)
     {
         await _routeRepository.RemoveAsync(id);

@@ -2,8 +2,8 @@ using AutoMapper;
 using BusInfo.Core.Classes;
 using BusInfo.Core.Interfaces.Repositories;
 using BusInfo.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Route = BusInfo.Core.Classes.Route;
 
 namespace BusInfo.Web.Controllers;
 
@@ -21,6 +21,7 @@ public class UserController : Controller
     }
 
     [Route("Driver/View/{userid}")]
+    [Authorize]
     public async Task<ViewResult> Profile(string userid)
     {
         var driver = await _userDriverRepository.GetByIdAsync(userid);
@@ -36,19 +37,22 @@ public class UserController : Controller
     }
 
     [Route("Driver/Add/")]
-    public Task<ViewResult> Profile()
+    [Authorize]
+    public ViewResult Profile()
     {
-        return Task.FromResult(View(new DriverViewModel { Id = Guid.NewGuid().ToString("N"),IsCreate = true}));
+        return View(new DriverViewModel { Id = Guid.NewGuid().ToString("N"),IsCreate = true});
         
     }
 
     [Route("/Drivers")]
+    [Authorize]
     public async Task<ViewResult> UserList()
     {
         var list =await  _userDriverRepository.ToListAsync();
         return View(list);
     }
 
+    
     [HttpPost]
     public async Task<IActionResult> UpdateProfile(DriverViewModel driverViewModel)
     {
@@ -68,6 +72,7 @@ public class UserController : Controller
     }
 
     [Route("User/Delete/{userid}/")]
+    [Authorize]
     public async Task<IActionResult> Delete(string userid)
     {
         await _userDriverRepository.RemoveAsync(userid);

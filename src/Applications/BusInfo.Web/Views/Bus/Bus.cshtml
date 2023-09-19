@@ -3,6 +3,54 @@
 @{
     Layout = "_Layout";
 }
+<script>
+function Edit(){
+	window.location.href="/Driver/View/@Model.DriverId";
+}
+	let map;
+let marker;
+		function initMap() {
+			map = new google.maps.Map( document.getElementById( 'map' ), {
+				center: {
+					lat: 51.513329,
+					lng: -0.088950
+				},
+				zoom: 15
+			});
+		google.maps.event.addListener(map,'click',function(event){
+			if (marker!=null) {
+				marker.setPosition(event.latLng);
+				let lattext = document.getElementById("lat");
+				lattext.value = event.latLng.lat()
+				let longtext = document.getElementById("long");
+				longtext.value = event.latLng.lng();
+		
+			}
+			else {
+                addMarker(event.latLng);
+            }
+		
+		})
+
+		}
+		function addMarker(position) {
+			marker = new google.maps.Marker({position: position,map: map});
+		google.maps.event.addListener(marker,'click',function(event){
+			marker.setMap(null);
+			marker=null;
+			
+		
+		})
+		let lattext = document.getElementById("lat");
+		lattext.value = position.lat();
+		console.log(lattext.value);
+		let longtext = document.getElementById("long");
+		longtext.value = position.lng();
+		
+		}
+		
+</script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 
@@ -134,51 +182,4 @@
     </main>
 
 </div>
-<script>
-function Edit(){
-	window.location.href="/Driver/View/@Model.DriverId";
-}
-	let map;
-let marker;
-		function initMap() {
-			map = new google.maps.Map( document.getElementById( 'map' ), {
-				center: {
-					lat: 51.513329,
-					lng: -0.088950
-				},
-				zoom: 15
-			});
-		google.maps.event.addListener(map,'click',function(event){
-			if (marker!=null) {
-				marker.setPosition(event.latLng);
-				let lattext = document.getElementById("lat");
-				lattext.value = event.latLng.lat()
-				let longtext = document.getElementById("long");
-				longtext.value = event.latLng.lng();
-		
-			}
-			else {
-                addMarker(event.latLng);
-            }
-		
-		})
-
-		}
-		function addMarker(position) {
-			marker = new google.maps.Marker({position: position,map: map});
-		google.maps.event.addListener(marker,'click',function(event){
-			marker.setMap(null);
-			marker=null;
-			
-		
-		})
-		let lattext = document.getElementById("lat");
-		lattext.value = position.lat();
-		console.log(lattext.value);
-		let longtext = document.getElementById("long");
-		longtext.value = position.lng();
-		
-		}
-		
-</script>
 
