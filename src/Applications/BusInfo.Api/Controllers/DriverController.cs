@@ -18,11 +18,11 @@ public class DriverController : Controller
         _busRepository = busRepository;
     }
     
-    [HttpPost("SignIn")]
+    [HttpGet("GetDriver")]
     public async Task<Bus> SignIn(string login, string password)
     {
         var driver = await _driverRepository.GetByLogPasswordAsync(login, password);
-        var bus = await _busRepository.GetByDriverIdAsync(driver!.Id);
+         var bus = await _busRepository.GetByDriverIdAsync(driver!.Id);
         return bus;
         
     }

@@ -6,85 +6,6 @@
 
 <script type="text/javascript">
 var pnum=@Model.Places.Count;
- function submitStudent() {
-        var data = $("#form").serialize();
-        console.log(data);
-		var isAdd = document.getElementById("isAdd").value;
-        $.ajax({
-            type: 'POST',
-            url: '/Route/ManagePlaceInRoute/',
-            data: data,
-            success: function (result) {
-				console.log(result);
-	
-				var moda=document.getElementById('exampleModal');
-				bootstrap.Modal.getInstance(moda).hide();
-				
-        
-				 if (isAdd==="true") {
-					 document.getElementById("isAdd").value=false;
-					 pnum = pnum+1;
-					 console.log(pnum);
-					var row = document.createElement("tr")
-					var ncell = document.createElement("td")
-					ncell.innerText  = pnum;
-					row.appendChild(ncell);
-					var pcell = document.createElement("td")
-					pcell.id = "placeName-"+pnum;
-					row.appendChild(pcell);
-					var latcell = document.createElement("td")
-                    latcell.id = "latitude-"+pnum;
-                    row.appendChild(latcell);
-					var longcell = document.createElement("td")
-                    longcell.id = "longitude-"+pnum;
-					row.appendChild(longcell);
-					var editbtn = document.createElement("button")
-                    editbtn.id = "editBtn-"+pnum;
-					editbtn.innerText="Дигаркунӣ";
-					editbtn.classList.add("btn")
-					editbtn.classList.add("btn-primary");
-					editbtn.classList.add("btn-sm");
-					editbtn.setAttribute("data-bs-toggle","modal")
-					editbtn.setAttribute("data-bs-target","#exampleModal");
-					row.appendChild(editbtn);
-				var	editcell = document.createElement("td");
-				var deletebtn = document.createElement("button");
-				var inputId = document.createElement("input");
-                inputId.type = "hidden";
-                inputId.id = "pId-"+pnum;
-                inputId.name = "Id";
-				inputId.value =result.toString();
-                row.appendChild(inputId);				
-				deletebtn.id = "deleteBtn-"+pnum;
-				deletebtn.innerText="Хориҷкунӣ"
-				deletebtn.classList.add("btn")
-				deletebtn.classList.add("btn-sm");
-                deletebtn.classList.add("btn-danger");
-				$(document).on("click","#deleteBtn-"+pnum,function() {
-					deletePlace(inputId.value,pnum)
-				})
-				var deletecell = document.createElement("td");
-				deletecell.appendChild(deletebtn);	
-				editcell.appendChild(editbtn);
-                				
-                row.appendChild(editcell);
-				row.appendChild(deletecell);
-				
-				
-					document.getElementById("body").appendChild(row);
-				}
-				document.getElementById("placeName-"+pnum).innerText=document.getElementById("pName").value
-				document.getElementById("latitude-"+pnum).innerText=document.getElementById("lat").value
-                document.getElementById("longitude-"+pnum).innerText=document.getElementById("long").value;		
-				
-            },
-            error: function () {
-                alert('Failed to receive the Data');
-                console.log('Failed ');
-            }
-        });
-        return false;
-    }
 		
  let map;
  let marker;
@@ -126,47 +47,7 @@ var pnum=@Model.Places.Count;
  		let longtext = document.getElementById("long");
  		longtext.value = position.lng();	
  		} 
-  var exampleModal = document.getElementById('exampleModal')
-  $("#myModal").on("hidden.bs.modal", function () {
-      document.getElementById("isAdd").value = false;
-  });
-  exampleModal.addEventListener('show.bs.modal', function (event) {
-	  
-	  var latR=0
-	  var longR=0
-	  var modalTitle = exampleModal.querySelector('.modal-title')
-	  if (event.relatedTarget.id==='pAdd') {
-		  document.getElementById("isAdd").value=true;
-		  
-		  initMap(0,0);
-	  }
-	  else{ 
-		  pnum = event.relatedTarget.id.split('-')[1];
-		  latR = document.getElementById("latitude-"+pnum).innerText;
-		  longR = document.getElementById("longitude-"+pnum).innerText;
-		  document.getElementById("Id").value =document.getElementById("pId-"+pnum).value
-		  var placeNameR = document.getElementById("placeName-"+pnum).innerText;
-		  document.getElementById("lat").value = latR;
-		  document.getElementById("long").value = longR;
-		  document.getElementById("pName").value = placeNameR;
-		   
-	  }
-	  initMap(latR,longR)
-	  addMarker(new google.maps.LatLng(latR, longR)); 
-  });
-		 function deletePlace(id,num) {
-			$.ajax({
-              type: "DELETE",
-              url: "/Route/DeletePlaceInRoute/" + "@Model.Name"+"/"+id,
-              success: function(data) {
-			
-				  location.reload();
-              },
-              error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-              }
-            }); 
-		 }
+  
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8psS4SSRjFm6Dn4dQfpA4BjDnhzpc7OI&callback=initMap" async defer></script>
@@ -266,3 +147,126 @@ var pnum=@Model.Places.Count;
         </div>
     </div>
 </div>
+<script>
+var exampleModal = document.getElementById("exampleModal");
+ function submitStudent() {
+        var data = $("#form").serialize();
+        console.log(data);
+		var isAdd = document.getElementById("isAdd").value;
+        $.ajax({
+            type: 'POST',
+            url: '/Route/ManagePlaceInRoute/',
+            data: data,
+            success: function (result) {
+				console.log(result);
+	
+				var moda=document.getElementById('exampleModal');
+				bootstrap.Modal.getInstance(moda).hide();
+				
+        
+				 if (isAdd==="true") {
+					 document.getElementById("isAdd").value=false;
+					 pnum = parseInt(pnum)+1;
+					 console.log(pnum);
+					var row = document.createElement("tr")
+					var ncell = document.createElement("td")
+					ncell.innerText  = pnum;
+					row.appendChild(ncell);
+					var pcell = document.createElement("td")
+					pcell.id = "placeName-"+pnum;
+					row.appendChild(pcell);
+					var latcell = document.createElement("td")
+                    latcell.id = "latitude-"+pnum;
+                    row.appendChild(latcell);
+					var longcell = document.createElement("td")
+                    longcell.id = "longitude-"+pnum;
+					row.appendChild(longcell);
+					var editbtn = document.createElement("button")
+                    editbtn.id = "editBtn-"+pnum;
+					editbtn.innerText="Дигаркунӣ";
+					editbtn.classList.add("btn")
+					editbtn.classList.add("btn-primary");
+					editbtn.classList.add("btn-sm");
+					editbtn.setAttribute("data-bs-toggle","modal")
+					editbtn.setAttribute("data-bs-target","#exampleModal");
+					row.appendChild(editbtn);
+				var	editcell = document.createElement("td");
+				var deletebtn = document.createElement("button");
+				var inputId = document.createElement("input");
+                inputId.type = "hidden";
+                inputId.id = "pId-"+pnum;
+                inputId.name = "Id";
+				inputId.value =result.toString();
+                row.appendChild(inputId);				
+				deletebtn.id = "deleteBtn-"+pnum;
+				deletebtn.innerText="Хориҷкунӣ"
+				deletebtn.classList.add("btn")
+				deletebtn.classList.add("btn-sm");
+                deletebtn.classList.add("btn-danger");
+				$(document).on("click","#deleteBtn-"+pnum,function() {
+					deletePlace(inputId.value,pnum)
+				})
+				var deletecell = document.createElement("td");
+				deletecell.appendChild(deletebtn);	
+				editcell.appendChild(editbtn);
+                				
+                row.appendChild(editcell);
+				row.appendChild(deletecell);
+				
+				
+					document.getElementById("body").appendChild(row);
+				}
+				document.getElementById("placeName-"+pnum).innerText=document.getElementById("pName").value
+				document.getElementById("latitude-"+pnum).innerText=document.getElementById("lat").value
+                document.getElementById("longitude-"+pnum).innerText=document.getElementById("long").value;		
+				
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+                console.log('Failed ');
+            }
+        });
+        return false;
+    }
+	$("#exampleModal").on("hidden.bs.modal", function () {
+          document.getElementById("isAdd").value = false;
+      });
+      exampleModal.addEventListener('show.bs.modal', function (event) {
+    	  
+    	  var latR=0
+    	  var longR=0
+    	  var modalTitle = exampleModal.querySelector('.modal-title')
+    	  if (event.relatedTarget.id==='pAdd') {
+    		  document.getElementById("isAdd").value=true;
+    		  
+    		  initMap(0,0);
+    	  }
+    	  else{ 
+    		  pnum = parseInt(event.relatedTarget.id.split('-')[1]);
+    		  latR = document.getElementById("latitude-"+pnum).innerText;
+    		  longR = document.getElementById("longitude-"+pnum).innerText;
+    		  document.getElementById("Id").value =document.getElementById("pId-"+pnum).value
+    		  var placeNameR = document.getElementById("placeName-"+pnum).innerText;
+    		  document.getElementById("lat").value = latR;
+    		  document.getElementById("long").value = longR;
+    		  document.getElementById("pName").value = placeNameR;
+    		   
+    	  }
+    	  initMap(latR,longR)
+    	  addMarker(new google.maps.LatLng(latR, longR)); 
+      });
+    		 function deletePlace(id,num) {
+    			$.ajax({
+                  type: "DELETE",
+                  url: "/Route/DeletePlaceInRoute/" + "@Model.Name"+"/"+id,
+                  success: function(data) {
+    			
+    				  location.reload();
+                  },
+                  error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                  }
+                }); 
+    		 }
+
+</script>

@@ -27,11 +27,11 @@ public class HomeController : Controller
     public async Task<ViewResult> Index()
     {
         ViewBag.Buses = await _busRepository.ToListAsync();
-
         ViewBag.Drivers = await _driverRepository.ToListAsync();
         ViewBag.Routes = await _routeRepository.ToListAsync();
         ViewBag.Places = await _placeRepository.ToListAsync();
-
+        ViewBag.EnabledBuses = _busRepository.GetEnabled();
+        
         return View();
     }
 

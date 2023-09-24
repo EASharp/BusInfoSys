@@ -20,6 +20,11 @@ public class BusRepository : RepositoryBase<Bus>, IRepositoryBase<Bus>, IBusRepo
         throw new NotImplementedException();
     }
 
+    public Task<List<Bus>> GetEnabled()
+    {
+        return set.Where(bus => bus.Enabled == true).ToListAsync();
+    }
+
     public async Task<bool> IsDriverIdExistAsync(string driverId)
     {
         if (await set.FirstOrDefaultAsync(bus => bus.DriverId == driverId)==null)
