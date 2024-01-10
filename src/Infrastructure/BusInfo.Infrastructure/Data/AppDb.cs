@@ -17,7 +17,7 @@ public class AppDb : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySql("Server=contest.tj;Database=BusInfo;Uid=root;Pwd=qj2JrsR1;",
+        optionsBuilder.UseMySql("Server=;Database=BusInfo;Uid=;Pwd=;",
             MariaDbServerVersion.LatestSupportedServerVersion);
     }
 }
